@@ -3,7 +3,7 @@ import { getToCartbyUserId,updateCart,deleteFromCart,addToCart,getAllCartItems }
 // import authenticateToken from '../middleware/verifyjwt'
 const router = express.Router();
 
-router.post('/addtocart',addToCart);
+router.post('/addtocart/:id',addToCart); // changes
 router.get('/getcartuser',getAllCartItems);
 router.get('/:_id',getToCartbyUserId)
 // router.post('/remove/:id',deleteFromCart);

@@ -43,9 +43,14 @@ export const getToCartbyUserId = async (req, res) => {
 
 export const addToCart = async (req, res) => {
  
-    if (!req.user || !req.user.id) {
+    // if (!req.user || !req.user.id) {
+    //     return res.status(401).json({ error: 'User not authenticated' });
+    // }
+
+    // changes
+    if (!req.params.id) {
         return res.status(401).json({ error: 'User not authenticated' });
-    }
+    } 
 
     const { id } = req.user;
     const { quantity, product, size, color } = req.body;
@@ -65,9 +70,11 @@ export const addToCart = async (req, res) => {
     try {
         const cart = new Cart(cartData);
         const savedCart = await cart.save();
-        const populatedCart = await savedCart.populate('product').execPopulate();
+        console.log(savedCart)
+        // const populatedCart = await savedCart.populate('product').execPopulate();
 
-        return res.status(201).json(populatedCart);
+        // return res.status(201).json(populatedCart);
+        return res.status(201).json(savedCart); // changes
     } catch (err) {
         console.error("Error adding to cart:", err); // Log the error for debugging
         return res.status(400).json({ error: 'Unable to add to cart', details: err.message });
