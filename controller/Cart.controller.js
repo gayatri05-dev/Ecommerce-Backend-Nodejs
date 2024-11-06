@@ -52,7 +52,7 @@ export const addToCart = async (req, res) => {
         return res.status(401).json({ error: 'User not authenticated' });
     } 
 
-    const { id } = req.user;
+    const { id } = req.params;
     const { quantity, product, size, color } = req.body;
 
     if (!quantity || !product) {
