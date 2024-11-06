@@ -41,7 +41,8 @@ export const userLogin = async (req,res) =>{
       const isMatch = await bcrypt.compare(password , user.password)
       console.log(isMatch)
 
-      if(!isMatch) return res.status(400).send('Credntial Invalid');
+      if(!isMatch) throw new Error('Credntial Invalid');
+    //   if(!isMatch) return res.status(400).send('Credntial Invalid');
       console.log(!isMatch)
 
 
@@ -49,6 +50,6 @@ export const userLogin = async (req,res) =>{
       console.log(token);
       res.json({token, user});
   } catch(err){
-      res.status(500).send("error logged In")
+      res.status(500).error("error logged In" + err.message);
   }
 };
