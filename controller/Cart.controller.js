@@ -1,4 +1,5 @@
 import Cart from "../model/cart.model";
+import Product from "../model/product.model";
 
 
 export const getAllCartItems = async (req,res)=>{
@@ -59,6 +60,7 @@ export const addToCart = async (req, res) => {
         return res.status(400).json({ error: 'Quantity and product are required' });
     }
 
+    
     const cartData = {
         quantity,
         product,
@@ -69,12 +71,19 @@ export const addToCart = async (req, res) => {
 
     try {
         const cart = new Cart(cartData);
-        const savedCart = await cart.save();
-        console.log(savedCart)
-        // const populatedCart = await savedCart.populate('product').execPopulate();
+       
+        const productCartData = await Cart.findOne({ user: id, product: product}).populate('user')
+        .populate('product')
 
+        if(productCartData){
+           return res.status(200).send("Product already added...")
+        }
+        await cart.save();
+        const productAdded = await Cart.findOne({ user: id, product: product}).populate('user')
+        .populate('product')
+        // const populatedCart = await savedCart.populate('product').execPopulate();
         // return res.status(201).json(populatedCart);
-        return res.status(201).json(savedCart); // changes
+        return res.status(201).json(productAdded); // changes
     } catch (err) {
         console.error("Error adding to cart:", err); // Log the error for debugging
         return res.status(400).json({ error: 'Unable to add to cart', details: err.message });

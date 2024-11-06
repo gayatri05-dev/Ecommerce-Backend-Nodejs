@@ -100,7 +100,7 @@ export const fetchAllProducts = async (req, res) => {
   }
   try {
     const docs = await query.exec();
-    console.log("DOcs",docs)
+    // console.log("DOcs",docs)
     const data = {products: docs, count:totalDocs}
     res.set('X-Total-Count', totalDocs);
     res.status(200).json(data);
