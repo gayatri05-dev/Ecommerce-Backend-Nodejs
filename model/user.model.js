@@ -32,6 +32,7 @@ const categorySchema = new Schema({
    addresses: {
       type:[Schema.Types.Mixed]
    }
+  
 });
 
 const virtual = categorySchema.virtual('id');

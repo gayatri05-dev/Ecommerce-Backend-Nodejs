@@ -20,17 +20,33 @@ export const getUserById  = async (req,res) =>{
 
     }
 }
+export const updateUser = async (req, res) => {
+    try {
+        const { firstName, lastName, email,addresses } = req.body;
+    console.log(req.body);
 
-export const updateUser = async (req,res) =>{
-    const {id} = req.params;
-    try{
-        const user = await User.findByIdAndUpdate(id ,req.body,{new:true});
+    
+    
+        const newuser = {
+            firstName,
+            lastName,
+            email,
+            addresses
+        };
+        let user = await User.findById(req.params.id)
+
+        user = await User.findByIdAndUpdate(
+            req.params.id,
+            {$set:newuser},
+            {new :true}
+        );
+        
         res.status(200).json(user);
-
-    } catch(err){
-        res.status(400).json(err)
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error In UpDating User Information");
     }
-}
+};
 
 // export const registerUser = async (req ,res) =>{
 //     const user = new User(req.body);

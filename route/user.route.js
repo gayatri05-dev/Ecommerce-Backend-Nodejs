@@ -4,7 +4,7 @@ import authenticateToken from '../middleware/verifyjwt';
 
 const router = express.Router();
 
-router.patch('/update',updateUser);
+router.patch('/update/:id',updateUser);
 router.get('/:id', authenticateToken ,getUserById);
 router.post('/add',userRegister)
 

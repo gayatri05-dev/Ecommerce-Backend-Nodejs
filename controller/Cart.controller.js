@@ -1,5 +1,6 @@
 import Cart from "../model/cart.model";
 import Product from "../model/product.model";
+import mongoose from 'mongoose'
 
 
 export const getAllCartItems = async (req,res)=>{
@@ -106,26 +107,59 @@ export const addToCart = async (req, res) => {
 //         res.status(400).json({ message: "Error saving category", error: err }); // Provide more context
 //     }
 // };
+export const deleteFromCart = async (req, res) => {
+    const { id } = req.params;
+    console.log("REQ PARAMS" , req.params)
+  
+    try {
+      // Validate the ID format before querying the database
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid cart item ID' });
+      }
+  
+      const doc = await Cart.findByIdAndDelete(id);
+  
+      if (!doc) {
+        return res.status(404).json({ message: 'Cart item not found' });
+      }
+  
+      res.status(200).json({ message: 'Cart item deleted', data: doc });
+    } catch (err) {
+      if (err.name === 'CastError') {
+        console.error('Invalid cart item ID:', err);
+        return res.status(400).json({ message: 'Invalid cart item ID' });
+      } else {
+        console.error('Error deleting cart item:', err);
+        res.status(500).json({ message: 'Failed to delete cart item' });
+      }
+    }
+  };
 
-// export const deleteFromCart = async (req,res)=>{
+// export const deleteFromCart = async (req ,res) =>{
+//     try{ 
 //     const {id} = req.params;
-//     try{
-//         const doc = await Cart.findByIdAndDelete(id);
-//         res.status(200).json(doc);
-//     } catch(err){
-//         res.status(400).json(err)
-//     }
-// }
 
-// export const updateCart = async (req,res)=>{
-//     const {id} = req.params;
-//     try{
-//         const cart = await Cart.findByIdAndUpdate(id , req.body,{
-//             new:true,
-//         });
-//         const result = await cart.populate('product');
-//         res.status(200).json(result)
-//     } catch(err){
-//         res.status(400).json(err)
+//      const product = await Cart.findByIdAndDelete({_id:id});
+      
+//      if(!product){
+//         return res.status(200).json({message : "Product Not Found"});
+//      }
+     
+//     res.status(200).json({message: "Product deleted Successfully"})
+//     } catch(error){
+//         res.status(500).json({message: error.message});
 //     }
-// }
+// };
+
+export const updateCart = async (req,res)=>{
+    const {id} = req.params;
+    try{
+        const cart = await Cart.findByIdAndUpdate(id , req.body,{
+            new:true,
+        });
+        const result = await cart.populate('product');
+        res.status(200).json(result)
+    } catch(err){
+        res.status(400).json(err)
+    }
+}
