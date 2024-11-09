@@ -14,14 +14,13 @@ export const fetchOrdersByUser = async (req, res) => {
   };
   
 export const createOrder = async (req, res) => {
-    const order = new Order(req.body);
-    
+    const {items, selectedAddress, totalAmount, totalItems, paymentMethod } = req.body
+    const itemObject = req.body
+    const userId = itemObject.items[0].user.id
     try {
-        for (let item of order.items) {
-            
+        for (let item of itemObject.items) {
             let product = await Product.findOne({ _id: item.product._id });
             if (product) {
-              
                 await Product.updateOne(
                     { _id: product._id },
                     { $inc: { stock: -1 * item.quantity } }
@@ -29,13 +28,22 @@ export const createOrder = async (req, res) => {
             }
         }
 
-        const doc = await order.save();
-        const user = await User.findById(order.user);
+        const orderObject = {
+          items:items,
+          selectedAddress:selectedAddress,
+          totalAmount:totalAmount,
+          totalItems:totalItems,
+          paymentMethod:paymentMethod,
+          user: userId
+        }
+        const order = new Order(orderObject);
 
-     
+        const doc = await order.save();
+        const user = await User.findById(userId);
+        
         await sendMail({
             to: user.email,
-            html: invoiceTemplate(order),
+            html: invoiceTemplate(order, selectedAddress),
             subject: 'Order Received'
         });
 

@@ -6,8 +6,9 @@ let transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: 'coderdost@gmail.com', // gmail
-    pass: process.env.MAIL_PASSWORD, // pass
+    user: 'gayakishorkhairkar@gmail.com', // gmail
+    pass:  "wbzv exid kssw simm", // pass
+    // pass: process.env.MAIL_PASSWORD, // pass
   },
 });
 
@@ -31,7 +32,7 @@ export const cookieExtractor = function (req) {
 
 export const sendMail = async function ({to, subject, text, html}){
     let info = await transporter.sendMail({
-        from: '"E-commerce" <coderdost@gmail.com>', // sender address
+        from: '"E-commerce" <gayakishorkhairkar@gmail.com>', // sender address
         to,
         subject,
         text,
@@ -40,7 +41,10 @@ export const sendMail = async function ({to, subject, text, html}){
     return info;  
 }
 
-export const invoiceTemplate = function(order){
+
+
+
+export const invoiceTemplate = function(order,selectedAddress){
 
  return (`<!DOCTYPE html>
 <html>
@@ -284,8 +288,7 @@ export const invoiceTemplate = function(order){
                   <tr>
                     <td align="left" valign="top" style="padding-bottom: 36px; padding-left: 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                       <p><strong>Delivery Address</strong></p>
-                      <p>${order.selectedAddress.name}<br>${order.selectedAddress.street}<br>${order.selectedAddress.city},${order.selectedAddress.state},${order.selectedAddress.pinCode}</p>
-                      <p>${order.selectedAddress.phone}</p>
+                      <p>${selectedAddress.address}<br>${selectedAddress.country}<br>${selectedAddress.phoneNumber},${selectedAddress.postalCode},${selectedAddress.state}</p>
 
                       </td>
                   </tr>
