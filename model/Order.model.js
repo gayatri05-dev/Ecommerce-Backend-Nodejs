@@ -21,9 +21,9 @@ const orderSchema = new Schema({
         type:String,
         required:true,
         enum:{
-            CREDIT_CARD: 'credit_card',
-    PAYPAL: 'paypal',
-    BANK_TRANSFER: 'bank_transfer'
+                CREDIT_CARD: 'credit_card',
+                PAYPAL: 'paypal',
+                BANK_TRANSFER: 'bank_transfer'
         }
     },
     paymentStatus:{
@@ -36,7 +36,7 @@ const orderSchema = new Schema({
     },
     selectedAddress:{
         type:Schema.Types.Mixed,
-        required:true
+        // required:true
     }
 },
     {

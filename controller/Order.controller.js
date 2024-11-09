@@ -1,46 +1,50 @@
-
 import Order from "../model/order.model";
 import Product from "../model/product.model";
 import User from "../model/user.model";
 import {sendMail , invoiceTemplate} from '../helper/common'
 
-
-
-
 export const fetchOrdersByUser = async (req, res) => {
     const { id } = req.user;
     try {
       const orders = await Order.find({ user: id });
-  
       res.status(200).json(orders);
     } catch (err) {
       res.status(400).json(err);
     }
   };
   
-  export const createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
     const order = new Order(req.body);
-    // here we have to update stocks;
     
-    for(let item of order.items){
-       let product =  await Product.findOne({_id:item.product.id})
-       product.$inc('stock',-1*item.quantity);
-       // for optimum performance we should make inventory outside of product.
-       await product.save()
-    }
-
     try {
-      const doc = await order.save();
-      const user = await User.findById(order.user)
-       // we can use await for this also 
-       sendMail({to:user.email,html:invoiceTemplate(order),subject:'Order Received' })
-             
-      res.status(201).json(doc);
+        for (let item of order.items) {
+            
+            let product = await Product.findOne({ _id: item.product._id });
+            if (product) {
+              
+                await Product.updateOne(
+                    { _id: product._id },
+                    { $inc: { stock: -1 * item.quantity } }
+                );
+            }
+        }
+
+        const doc = await order.save();
+        const user = await User.findById(order.user);
+
+     
+        await sendMail({
+            to: user.email,
+            html: invoiceTemplate(order),
+            subject: 'Order Received'
+        });
+
+        res.status(201).json(doc);
     } catch (err) {
-      res.status(400).json(err);
+        res.status(400).json(err);
     }
-  };
-  
+};
+
   export const deleteOrder = async (req, res) => {
       const { id } = req.params;
       try {

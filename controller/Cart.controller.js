@@ -13,19 +13,6 @@ export const getAllCartItems = async (req,res)=>{
     }
 }
 
-// export const getToCartByUser = async(req,res)=>{
-//     const {user} = req.params;
-//     console.log("ASDFG",req.params)
-//     try{
-//         const cartItems = await Cart.find({user:user})
-//         .populate('user')
-//         .populate('product')
-//         res.status(200).json(cartItems)
-//     } catch(err){
-//         res.status(400).json(err);
-//     }
-// }
-
 export const getToCartbyUserId = async (req, res) => {
     console.log(req.params._id);
     
@@ -91,22 +78,7 @@ export const addToCart = async (req, res) => {
     }
 };
 
-// export const addToCart = async (req, res) => {
-//     const cart = new Cart(req.body);
 
-//     // // Optionally validate the incoming data here
-//     // if (!category.name) { // Assuming 'name' is a required field
-//     //     return res.status(400).json({ message: "Category name is required." });
-//     // }
-
-//     try {
-//         const doc = await cart.save();
-//         res.status(201).json(doc);
-//     } catch (err) {
-//         console.error(err); // Log the error for debugging
-//         res.status(400).json({ message: "Error saving category", error: err }); // Provide more context
-//     }
-// };
 export const deleteFromCart = async (req, res) => {
     const { id } = req.params;
     console.log("REQ PARAMS" , req.params)
@@ -135,21 +107,7 @@ export const deleteFromCart = async (req, res) => {
     }
   };
 
-// export const deleteFromCart = async (req ,res) =>{
-//     try{ 
-//     const {id} = req.params;
 
-//      const product = await Cart.findByIdAndDelete({_id:id});
-      
-//      if(!product){
-//         return res.status(200).json({message : "Product Not Found"});
-//      }
-     
-//     res.status(200).json({message: "Product deleted Successfully"})
-//     } catch(error){
-//         res.status(500).json({message: error.message});
-//     }
-// };
 
 export const updateCart = async (req,res)=>{
     const {id} = req.params;
