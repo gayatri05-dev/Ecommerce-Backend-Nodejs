@@ -24,10 +24,7 @@ const cartSchema = new Schema ({
     }
 })
 
-// const virtual = cartSchema.virtual('id');
-// virtual.get(function(){
-//     return this._id;
-// })
+
 cartSchema.virtual('id').get(function() {
     return this._id;
 });

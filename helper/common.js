@@ -7,7 +7,7 @@ let transporter = nodemailer.createTransport({
   secure: false, // true for 465, false for other ports
   auth: {
     user: 'gayakishorkhairkar@gmail.com', // gmail
-    pass:  "wbzv exid kssw simm", // pass
+    pass:  "gpbq qhry hlmu gdmh", // pass
     // pass: process.env.MAIL_PASSWORD, // pass
   },
 });
@@ -34,7 +34,7 @@ export const sendMail = async function ({to, subject, text, html}){
     let info = await transporter.sendMail({
         from: '"E-commerce" <gayakishorkhairkar@gmail.com>', // sender address
         to,
-        subject,
+        subject:"Your Order Is SuccessFully Placed !",
         text,
         html
       });
